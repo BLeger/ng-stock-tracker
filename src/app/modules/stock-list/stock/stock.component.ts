@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { catchError, EMPTY, Observable } from 'rxjs';
 import { IStock } from '../../../shared/model/stock';
 import { StockService } from '../../../shared/services/stock.service';
 
@@ -7,18 +8,22 @@ import { StockService } from '../../../shared/services/stock.service';
   templateUrl: './stock.component.html',
   styleUrls: ['./stock.component.scss'],
 })
-export class StockComponent {
+export class StockComponent implements OnInit {
   @Input() symbol!: string;
-  stock: IStock = {
-    name: 'Tesla',
-    symbol: 'TSLA',
-    price: 200,
-    changeToday: 10,
-    opening: 190,
-    high: 215,
-  };
+
+  stock$?: Observable<IStock | undefined>;
+  error = false;
 
   constructor(private stockService: StockService) {}
+
+  ngOnInit(): void {
+    this.stock$ = this.stockService.getStockDetails(this.symbol).pipe(
+      catchError(() => {
+        this.error = true;
+        return EMPTY;
+      })
+    );
+  }
 
   remove(): void {
     this.stockService.removeStock(this.symbol);
