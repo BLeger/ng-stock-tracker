@@ -24,6 +24,10 @@ export class StockService {
   }
 
   addStock(stockSymbol: string): void {
+    if (this.stockSymbols.includes(stockSymbol)) {
+      return;
+    }
+
     this.stockSymbols.push(stockSymbol);
     this.updateStocks();
   }

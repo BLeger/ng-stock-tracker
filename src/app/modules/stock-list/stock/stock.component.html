@@ -41,11 +41,14 @@
           <div class="col-sm-4 stock-data stock-change">
             <app-trend-arrow [value]="stock.changeToday"></app-trend-arrow>
 
-            <a
+            <button
+              type="button"
+              class="btn btn-link"
               [routerLink]="['sentiment', stock.symbol]"
               [id]="'sentiment' + symbol"
-              >See sentiment details</a
             >
+              See sentiment details
+            </button>
           </div>
         </div>
       </ng-container>

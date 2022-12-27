@@ -9,3 +9,9 @@
 .stock-data {
   margin-top: 10px;
 }
+
+form.submitted {
+  input.ng-invalid {
+    border: 1px solid red;
+  }
+}

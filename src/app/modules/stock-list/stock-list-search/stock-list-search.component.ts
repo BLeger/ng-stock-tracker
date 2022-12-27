@@ -8,13 +8,22 @@ import { StockService } from '../../../shared/services/stock.service';
   styleUrls: ['./stock-list-search.component.scss'],
 })
 export class StockListSearchComponent {
+  submitted = false;
   addStockForm = this.fb.group({
-    stockSymbol: ['', [Validators.required]],
+    stockSymbol: [
+      '',
+      [
+        Validators.required,
+        Validators.maxLength(5),
+        Validators.pattern('[a-zA-Z]+'),
+      ],
+    ],
   });
 
   constructor(private fb: FormBuilder, private stockService: StockService) {}
 
   addStock(): void {
+    this.submitted = true;
     if (this.addStockForm.invalid) {
       return;
     }
@@ -23,5 +32,6 @@ export class StockListSearchComponent {
       this.addStockForm.get('stockSymbol')!.value ?? ''
     ); // TODO mieux gérer
     this.addStockForm.reset();
+    this.submitted = false;
   }
 }
