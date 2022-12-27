@@ -1,0 +1,47 @@
+<div class="card">
+  <div class="card-body">
+    <button
+      type="button"
+      [id]="'remove' + symbol"
+      class="btn-close"
+      aria-label="Close"
+    ></button>
+    <h5 class="card-title">
+      {{ stock.name }} <span class="badge bg-primary">{{ stock.symbol }}</span>
+    </h5>
+
+    <div class="row stock-info">
+      <div class="col-sm-8 row">
+        <div class="col-sm-6 stock-data">
+          <h6>Change today</h6>
+          <span [ngClass]="stock.changeToday >= 0 ? 'data-up' : 'data-down'">{{
+            stock.changeToday / 100 | customPercent
+          }}</span>
+        </div>
+        <div class="col-sm-6 stock-data">
+          <h6>Opening price</h6>
+          {{ stock.opening | currency }}
+        </div>
+        <div class="col-sm-6 stock-data">
+          <h6>Current price</h6>
+          {{ stock.price | currency }}
+        </div>
+        <div class="col-sm-6 stock-data">
+          <h6>High price</h6>
+          {{ stock.high | currency }}
+        </div>
+      </div>
+      <div class="col-sm-4 stock-data stock-change">
+        <div
+          class="change"
+          [ngClass]="stock.changeToday >= 0 ? 'data-up' : 'data-down'"
+        >
+          <span *ngIf="stock.changeToday >= 0; else down">&#11016; </span>
+          <ng-template #down>&#11018; </ng-template>
+        </div>
+
+        <a [routerLink]="['sentiment', stock.symbol]">See sentiment details</a>
+      </div>
+    </div>
+  </div>
+</div>
