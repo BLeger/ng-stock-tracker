@@ -9,20 +9,21 @@
     ></button>
 
     <ng-container *ngIf="!error; else errorMessage">
-      <ng-container *ngIf="stock$ | async as stock; else loading">
+      <ng-container *ngIf="stock$ | async as stock; else loadingMessage">
         <h5 class="card-title">
           {{ stock.name }}
           <span class="badge bg-primary">{{ stock.symbol }}</span>
         </h5>
+        <hr />
 
         <div class="row stock-info">
           <div class="col-sm-8 row">
             <div class="col-sm-6 stock-data">
               <h6>Change today</h6>
-              <span
-                [ngClass]="stock.changeToday >= 0 ? 'data-up' : 'data-down'"
-                >{{ stock.changeToday / 100 | customPercent }}</span
-              >
+
+              <span [appUpDownColor]="stock.changeToday">{{
+                stock.changeToday / 100 | customPercent
+              }}</span>
             </div>
             <div class="col-sm-6 stock-data">
               <h6>Opening price</h6>
@@ -38,13 +39,7 @@
             </div>
           </div>
           <div class="col-sm-4 stock-data stock-change">
-            <div
-              class="change"
-              [ngClass]="stock.changeToday >= 0 ? 'data-up' : 'data-down'"
-            >
-              <span *ngIf="stock.changeToday >= 0; else down">&#11016; </span>
-              <ng-template #down>&#11018;</ng-template>
-            </div>
+            <app-trend-arrow [value]="stock.changeToday"></app-trend-arrow>
 
             <a
               [routerLink]="['sentiment', stock.symbol]"
@@ -56,7 +51,9 @@
       </ng-container>
     </ng-container>
 
-    <ng-template #loading>{{ symbol }} : Loading stock data ...</ng-template>
+    <ng-template #loadingMessage
+      >{{ symbol }} : Loading stock data ...</ng-template
+    >
     <ng-template #errorMessage
       >{{ symbol }} : This stock could not be found</ng-template
     >

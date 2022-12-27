@@ -1,0 +1,4 @@
+<div class="change" [ngClass]="value >= 0 ? 'data-up' : 'data-down'">
+  <span *ngIf="value >= 0; else down">&#11016;</span>
+  <ng-template #down>&#11018;</ng-template>
+</div>

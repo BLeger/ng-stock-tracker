@@ -1,0 +1,55 @@
+<div class="card">
+  <div class="card-body">
+    <ng-container *ngIf="!error; else errorMessage">
+      <ng-container
+        *ngIf="sentiment$ | async as sentiment; else loadingMessage"
+      >
+        <h5 class="card-title">
+          {{ sentiment.name }}
+          <span class="badge bg-primary">{{ sentiment.symbol }}</span>
+        </h5>
+        <hr />
+
+        <div class="row sentiment-data">
+          <div class="col" *ngFor="let monthSentiment of sentiment.data">
+            <h5>
+              {{ monthSentiment.month | month }} {{ monthSentiment.year }}
+            </h5>
+            <div class="row">
+              <div class="col">
+                <div class="stock-data">
+                  <h6>Change</h6>
+                  <span [appUpDownColor]="monthSentiment.change">{{
+                    monthSentiment.change
+                  }}</span>
+                </div>
+                <div class="stock-data">
+                  <h6>MSPR</h6>
+                  <span [appUpDownColor]="monthSentiment.mspr">{{
+                    monthSentiment.mspr
+                  }}</span>
+                </div>
+              </div>
+              <div class="col">
+                <app-trend-arrow
+                  [value]="monthSentiment.change"
+                ></app-trend-arrow>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+
+    <ng-template #loadingMessage
+      >{{ symbol }} : Loading sentiment data ...</ng-template
+    >
+    <ng-template #errorMessage
+      >{{ symbol }} : This stock could not be found</ng-template
+    >
+  </div>
+</div>
+
+<a class="btn btn-link" id="backBtn" routerLink="">
+  &lt; Back to list of stocks
+</a>

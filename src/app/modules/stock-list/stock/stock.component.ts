@@ -11,7 +11,7 @@ import { StockService } from '../../../shared/services/stock.service';
 export class StockComponent implements OnInit {
   @Input() symbol!: string;
 
-  stock$?: Observable<IStock | undefined>;
+  stock$?: Observable<IStock>;
   error = false;
 
   constructor(private stockService: StockService) {}

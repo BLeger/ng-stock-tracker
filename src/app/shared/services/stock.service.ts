@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { combineLatest, map, Observable } from 'rxjs';
+import { ISentiment } from '../model/sentiment';
 import { IStock } from '../model/stock';
 import { FinnhubApiService } from './finnhub-api.service';
 
@@ -11,6 +12,7 @@ export class StockService {
   private readonly SEPARATOR = ',';
   stockSymbols: string[];
 
+  // TODO move localStorage vers un autre service
   constructor(private finnhubApi: FinnhubApiService) {
     const storageSymbols = localStorage.getItem(this.SYMBOLS_KEY);
 
@@ -42,19 +44,10 @@ export class StockService {
   }
 
   getStockDetails(symbol: string): Observable<IStock> {
-    const search$ = this.finnhubApi.search(symbol).pipe(
-      map((search) => {
-        const result = search.result.find((result) => result.symbol === symbol);
-        if (!result) {
-          throw new Error('');
-        }
-
-        return result;
-      })
-    );
+    const find$ = this.finnhubApi.find(symbol);
     const quote$ = this.finnhubApi.quote(symbol);
 
-    return combineLatest([search$, quote$]).pipe(
+    return combineLatest([find$, quote$]).pipe(
       map(([data, quote]) => {
         return {
           symbol: data.symbol,
@@ -63,7 +56,31 @@ export class StockService {
           changeToday: quote.dp,
           high: quote.h,
           opening: quote.o,
-        } as IStock;
+        };
+      })
+    );
+  }
+
+  getStockSentiment(
+    symbol: string,
+    from: Date,
+    to: Date
+  ): Observable<ISentiment> {
+    const find$ = this.finnhubApi.find(symbol);
+    const sentiment$ = this.finnhubApi.sentiment(symbol, from, to);
+
+    return combineLatest([find$, sentiment$]).pipe(
+      map(([data, sentiment]) => {
+        return {
+          symbol: data.symbol,
+          name: data.description,
+          data: sentiment.data.map((s) => ({
+            month: s.month,
+            year: s.year,
+            change: s.change,
+            mspr: s.mspr,
+          })),
+        };
       })
     );
   }
