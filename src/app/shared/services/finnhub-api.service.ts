@@ -1,10 +1,10 @@
 import { DatePipe } from '@angular/common';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { IFinnHubQuote } from '../model/finnhub-quote';
-import { IFinnHubSearch, IFinnHubSearchResult } from '../model/finnhub-search';
+import { IFinnHubSearch } from '../model/finnhub-search';
 import { IFinnHubSentiment } from '../model/finnhub-sentiment';
 
 @Injectable({
@@ -23,19 +23,6 @@ export class FinnhubApiService {
     return this.http.get<IFinnHubSearch>(environment.FINNHUB_URL + 'search', {
       params: this.createToken().set('q', symbol),
     });
-  }
-
-  find(symbol: string): Observable<IFinnHubSearchResult> {
-    return this.search(symbol).pipe(
-      map((search) => {
-        const result = search.result.find((result) => result.symbol === symbol);
-        if (!result) {
-          throw new Error('Unknown stock');
-        }
-
-        return result;
-      })
-    );
   }
 
   quote(symbol: string): Observable<IFinnHubQuote> {

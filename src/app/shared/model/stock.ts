@@ -1,3 +1,7 @@
+export interface IStockName {
+  name: string;
+  symbol: string;
+}
 export interface IStock {
   symbol: string;
   name: string;

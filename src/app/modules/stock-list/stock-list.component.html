@@ -1,6 +1,6 @@
 <app-stock-list-search></app-stock-list-search>
 
-<app-stock
-  *ngFor="let symbol of stockService.stockSymbols"
+<app-stock-list-item
+  *ngFor="let symbol of stockStorageService.stockSymbols"
   [symbol]="symbol"
-></app-stock>
+></app-stock-list-item>

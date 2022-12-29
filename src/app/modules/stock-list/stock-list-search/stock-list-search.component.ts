@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { StockService } from '../../../shared/services/stock.service';
+import { StockStorageService } from '../../../shared/services/stock-storage.service';
 
 @Component({
   selector: 'app-stock-list-search',
@@ -20,7 +20,10 @@ export class StockListSearchComponent {
     ],
   });
 
-  constructor(private fb: FormBuilder, private stockService: StockService) {}
+  constructor(
+    private fb: FormBuilder,
+    private stockStorageService: StockStorageService
+  ) {}
 
   addStock(): void {
     this.submitted = true;
@@ -28,9 +31,9 @@ export class StockListSearchComponent {
       return;
     }
 
-    this.stockService.addStock(
-      this.addStockForm.get('stockSymbol')!.value ?? ''
-    ); // TODO mieux gérer
+    this.stockStorageService.addStock(
+      this.addStockForm.get('stockSymbol')!.value!
+    );
     this.addStockForm.reset();
     this.submitted = false;
   }

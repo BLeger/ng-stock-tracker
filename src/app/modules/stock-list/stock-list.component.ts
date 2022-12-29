@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { StockService } from '../../shared/services/stock.service';
+import { StockStorageService } from '../../shared/services/stock-storage.service';
 
 @Component({
   selector: 'app-stock-list',
@@ -7,5 +7,5 @@ import { StockService } from '../../shared/services/stock.service';
   styleUrls: ['./stock-list.component.scss'],
 })
 export class StockListComponent {
-  constructor(public stockService: StockService) {}
+  constructor(public stockStorageService: StockStorageService) {}
 }

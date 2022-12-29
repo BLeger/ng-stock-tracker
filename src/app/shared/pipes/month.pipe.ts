@@ -9,7 +9,7 @@ export class MonthPipe implements PipeTransform {
 
   transform(value: number): string {
     const date = new Date();
-    date.setMonth(value);
+    date.setMonth(value - 1);
     return this.datePipe.transform(date, 'MMMM') ?? value.toString();
   }
 }
